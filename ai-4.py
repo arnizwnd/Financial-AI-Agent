@@ -200,7 +200,17 @@ if prompt := st.chat_input("Ask something here!"):
             )
             agent = create_tool_calling_agent(llm, tools, prompt_input)
             agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
-            response = agent_executor.invoke({"input":prompt})
-            answer = response.get('output', 'No response received.')
-            st.session_state.messages.append({'role': 'assistant', 'content': answer})
-            st.success(response["output"])
+            try:
+                response = agent_executor.invoke({"input":prompt})
+                answer = response.get('output', 'No response received.')
+                st.session_state.messages.append({'role': 'assistant', 'content': answer})
+                st.success(response["output"])
+            except requests.exceptions.HTTPError as e:
+                if e.response.status_code == 429:  # HTTP 429 Too Many Requests
+                    st.error("We've reached our API usage limit. Please wait a few minutes and try again.")
+                else:
+                    st.error(f"Oops! Something went wrong: {e}. Please try again later.")
+            except requests.exceptions.RequestException as e:
+                st.error(f"Network issue detected: {e}. Please check your connection or try again later.")
+            except Exception as e:
+                st.error(f"Unexpected error: {e}. Please try again or contact support if the issue persists.")
