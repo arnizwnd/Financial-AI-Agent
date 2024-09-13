@@ -211,6 +211,6 @@ if prompt := st.chat_input("Ask something here!"):
                 else:
                     st.error(f"Oops! Something went wrong: {e}. Please try again later.")
             except requests.exceptions.RequestException as e:
-                st.error(f"Network issue detected: {e}. Please check your connection or try again later.")
+                st.error("I'm sorry but I do not have the capability to perform this task for you, I am happy to help you with any other queries you may have.")
             except Exception as e:
                 st.error(f"Unexpected error: {e}. Please try again or contact support if the issue persists.")
