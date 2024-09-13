@@ -141,7 +141,7 @@ llm = ChatGroq(
     groq_api_key=GROQ_API_KEY,
 )
 
-st.title("💬Financial Agent AI")
+st.title("💬Financial AI Agent")
 
 if 'messages' not in st.session_state:
     st.session_state.messages = []
